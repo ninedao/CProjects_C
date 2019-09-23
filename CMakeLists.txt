@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.14)
+project(CProjects_C C)
+
+set(CMAKE_C_STANDARD 99)
+
+add_executable(CProjects_C main.c)
+add_executable(cLinkList  src/List/CircleLinkList/cLinkList.c)
+add_executable(dulLinkList src/List/DoubleLinkList/dulLinkList.h  src/List/DoubleLinkList/dulLinkList.c)
+add_executable(LinkListWithNode  src/List/LinkListWithNode/LinkList.c)
+add_executable(PolynomialList  src/List/PolynomialList/PolynomialList.c)
+add_executable(SequenceStack  src/Stack/SequenceStack/SequenceStack.c)
+add_executable(LinkStack  src/Stack/LinkStack/LinkStack.c)
+add_executable(MatchBrace  src/Stack/LinkStack/MatchBrace/MatchBrace.c)
+add_executable(LineEdit  src/Stack/SequenceStack/LineEdit/LineEdit.c)
