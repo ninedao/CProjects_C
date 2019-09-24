@@ -4,6 +4,7 @@
 #include<stdio.h>
 #include<malloc.h>
 #include<string.h>
+#include<time.h>
 #ifndef CPROJECTS_C_COMMON_H
 #define CPROJECTS_C_COMMON_H
 #define TRUE 1

@@ -8,7 +8,8 @@
 #define STACKMAXSIZE 5
 #define STACKINCREASESIZE 10
 #if !defined(CPROJECTS_C_LINKSTACK_H) && \
-    !defined(CPROJECTS_C_LINEEDIT_H)
+    !defined(CPROJECTS_C_LINEEDIT_H) && \
+    !defined(CPROJECTS_C_MAZE_H)
     typedef int ElemType;
 #endif
 #if !defined(CPROJECTS_C_LINKSTACK_H)
