@@ -4,7 +4,7 @@
 
 #ifndef CPROJECTS_C_MAZE_H
 #define CPROJECTS_C_MAZE_H
-#define N 15
+#define N 12
 #define X 4
 #define SleepTime 2
 typedef int MazeType;
@@ -69,34 +69,38 @@ int PaintMaze(MazeType maze[][N]){
             }else if(maze[i][j] == DeadLock){
                 printf("¡Á");
             }else{
-                printf(" ");
+                printf("  ");
+            }
+            if(j != 0 && j % (N - 1) == 0){
+                printf("\n");
             }
         }
-        printf("\n");
+
     }
     return SUCCESS;
 }
-int NextPos(PosType *seat, int di){
+PosType NextPos(PosType seat, int di){
     switch(di){
         case North:
-            seat->x--;
+            seat.x--;
             break;
         case South:
-            seat->x++;
+            seat.x++;
             break;
         case West:
-            seat->y--;
+            seat.y--;
             break;
         case East:
-            seat->y++;
+            seat.y++;
             break;
     }
+    return seat;
 }
 int IsCross(PosType seat){
     if(seat.x < 0 || seat.y < 0 || seat.x > N-1 || seat.y > N-1){
-        return FALSE;
-    }else{
         return TRUE;
+    }else{
+        return FALSE;
     }
 }
 int MakeMark(PosType seat, MazeType maze[][N]){
@@ -125,12 +129,12 @@ void SetElemType(ElemType *e, int ord, PosType seat, int di){
     e->di = di;
 }
 void ShowMaze(MazeType maze[][N]){
-    double start = time(0);
+    /*double start = time(0);
     double end = time(0);
     while(end - start <= 1){
         end = time(0);
     }
-    system("cls");
+    system("CLS");*/
     PaintMaze(maze);
 }
 int MazePath(MazeType maze[][N], PosType start, PosType end){
@@ -149,21 +153,23 @@ int MazePath(MazeType maze[][N], PosType start, PosType end){
                 printf("Search path SUCCESS;\n");
                 return TRUE;
             }
-            NextPos(&curpos , East);
+            curpos = NextPos(curpos , East);
             curStep++;
         }else{
+
             if(!StackEmpty(s)){
                 pop(&s , &curElem);
                 while(curElem.di == North && !StackEmpty(s)){
-                    MakeMark(curpos , maze);
+                    MakeMark(curElem.seat , maze);
                     ShowMaze(maze);
                     pop(&s , &curElem);
                 }
                 if(curElem.di <North){
-                    maze[curElem.seat.x][curElem.seat.y] = ++curElem.di;
+                    ++curElem.di;
+                    maze[curElem.seat.x][curElem.seat.y] = curElem.di;
                     ShowMaze(maze);
                     push(&s , curElem);
-                    NextPos(&curpos, curElem.di);
+                    curpos = NextPos(curElem.seat, curElem.di);
                 }
             }
         }

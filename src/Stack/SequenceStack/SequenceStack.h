@@ -71,7 +71,7 @@ int pop(SqStack *s, ElemType *e){
         exit(OVERFLOW);
     }
     s->top --;
-    e = s->top;
+    *e = *(s->top);
     return SUCCESS;
 }
 
