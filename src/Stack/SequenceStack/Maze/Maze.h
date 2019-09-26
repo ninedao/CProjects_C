@@ -4,7 +4,7 @@
 
 #ifndef CPROJECTS_C_MAZE_H
 #define CPROJECTS_C_MAZE_H
-#define N 12
+#define N 15
 #define X 4
 #define SleepTime 2
 typedef int MazeType;
@@ -46,55 +46,59 @@ int InitMaze(MazeType maze[][N], PosType *start, PosType *end){
     start->y = 0;
     end->x = N - 2;
     end->y = N - 1;
-    maze[1][0] = maze[N-2][N-1] = Way;
     maze[1][1] = maze[N-2][N-2] = Way;
+    maze[1][0] = maze[N-2][N-1] = Way;
     printf("InitMaze SUCCESS!\n");
     return SUCCESS;
 }
 int PaintMaze(MazeType maze[][N]){
+    FILE *file;
+    file = fopen("C:\\Users\\POPO LIU\\Desktop\\1.txt","at");
     for(int i = 0 ; i < N ; i++){
         for(int j = 0; j < N ; j++){
             if(maze[i][j] == Wall ){
-                printf("¨€");
+                fprintf(file,"¨€");
             }else if(maze[i][j] == Obstacle){
-                printf("¨€");
+                fprintf(file,"¨€");
             }else if(maze[i][j] == East){
-                printf("¡ú");
+                fprintf(file,"¡ú");
             }else if(maze[i][j] == South){
-                printf("¡ý");
+                fprintf(file,"¡ý");
             }else if(maze[i][j] == West){
-                printf("¡û");
+                fprintf(file,"¡û");
             }else if(maze[i][j] == North){
-                printf("¡ü");
+                fprintf(file,"¡ü");
             }else if(maze[i][j] == DeadLock){
-                printf("¡Á");
+                fprintf(file,"¡Á");
             }else{
-                printf("  ");
+                fprintf(file," ");
             }
             if(j != 0 && j % (N - 1) == 0){
-                printf("\n");
+                fprintf(file,"\n");
             }
         }
 
     }
+    fclose(file);
     return SUCCESS;
 }
 PosType NextPos(PosType seat, int di){
+    PosType s = seat;
     switch(di){
         case North:
-            seat.x--;
+            s.x--;
             break;
         case South:
-            seat.x++;
+            s.x++;
             break;
         case West:
-            seat.y--;
+            s.y--;
             break;
         case East:
-            seat.y++;
+            s.y++;
             break;
     }
-    return seat;
+    return s;
 }
 int IsCross(PosType seat){
     if(seat.x < 0 || seat.y < 0 || seat.x > N-1 || seat.y > N-1){
@@ -124,9 +128,9 @@ void FootPrint(PosType seat, MazeType maze[][N]){
     maze[seat.x][seat.y] = East;
 }
 void SetElemType(ElemType *e, int ord, PosType seat, int di){
-    e->ord = ord;
-    e->seat = seat;
-    e->di = di;
+    (*e).ord = ord;
+    (*e).seat = seat;
+    (*e).di = di;
 }
 void ShowMaze(MazeType maze[][N]){
     /*double start = time(0);
@@ -137,9 +141,9 @@ void ShowMaze(MazeType maze[][N]){
     system("CLS");*/
     PaintMaze(maze);
 }
-int MazePath(MazeType maze[][N], PosType start, PosType end){
-    SqStack s;
-    InitStack(&s);
+int MazePath(SqStack s,MazeType maze[][N], PosType start, PosType end){
+    FILE *file;
+    file = fopen("C:\\Users\\POPO LIU\\Desktop\\1.txt","at");
     ElemType curElem;
     PosType curpos = start;
     int curStep = 1;
@@ -151,6 +155,7 @@ int MazePath(MazeType maze[][N], PosType start, PosType end){
             push(&s , curElem);
             if(EqualMaze(curpos, end)){
                 printf("Search path SUCCESS;\n");
+                fprintf(file,"Search path SUCCESS;\n");
                 return TRUE;
             }
             curpos = NextPos(curpos , East);
@@ -175,6 +180,8 @@ int MazePath(MazeType maze[][N], PosType start, PosType end){
         }
     }while(!StackEmpty(s));
     printf("Search path FAIL;\n");
+    fprintf(file,"Search path FAIL;\n");
+    fclose(file);
     return FAIL;
 }
 #endif //CPROJECTS_C_MAZE_H

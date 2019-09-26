@@ -6,14 +6,17 @@
 int main(){
     PosType start, end;
     MazeType maze[N][N];
-
+    SqStack s;
+    InitStack(&s);
     char re = 'Y';
-    while(re == 'Y' || re == 'y'){
+    printf("go on? (Y/N) : ");
+    scanf(" %c",&re);
+    while( re =='Y' || re == 'y'){
         InitMaze(maze , &start , &end);
         ShowMaze(maze);
-        MazePath(maze,start,end);
-
+        ClearStack(&s);
+        MazePath(s,maze,start,end);
         printf("review? (Y/N) : ");
-        scanf("%c",&re);
+        scanf(" %c",&re);
     }
 }

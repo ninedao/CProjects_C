@@ -17,4 +17,5 @@
 #define OVERFLOW -2
 #define null NULL
 #define Null NULL
+#define status int
 #endif //CPROJECTS_C_COMMON_H

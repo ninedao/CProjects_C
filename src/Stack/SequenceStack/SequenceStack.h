@@ -10,7 +10,7 @@ int visit(ElemType e){
 }
 #endif
 int InitStack(SqStack *s){
-    s->base = (ElemType *)malloc(sizeof(ElemType));
+    s->base = (ElemType *)malloc(STACKMAXSIZE * sizeof(ElemType));
     if(!s->base){
         printf("InitStack ERROR!\n");
     }
@@ -53,16 +53,16 @@ int GetTop(SqStack s, ElemType *e){
 };
 int push(SqStack *s, ElemType e){
     if(s->top - s->base >= s->size){
-        //s->base = (ElemType *)realloc(s->base,((s->size + STACKINCREASESIZE) * sizeof(ElemType)));
-        /*if(!s->base){
+        s->base = (ElemType *)realloc(s->base,(s->size + STACKINCREASESIZE) * sizeof(ElemType));
+        if(!s->base){
             printf("Push ERROR!\n");
             exit(OVERFLOW);
-        }*/
-        //s->top = s->base + s->size;
-        s->size = s->size + STACKINCREASESIZE;
+        }
+        s->top = s->base + s->size;
+        (*s).size = (*s).size + STACKINCREASESIZE;
     }
     *(s->top) = e;
-    s->top ++;
+    (s->top)++ ;
     return SUCCESS;
 }
 int pop(SqStack *s, ElemType *e){
@@ -70,8 +70,8 @@ int pop(SqStack *s, ElemType *e){
         printf("pop ERROR!\n");
         exit(OVERFLOW);
     }
-    s->top --;
-    *e = *(s->top);
+    (*s).top --;
+    *e = *((*s).top);
     return SUCCESS;
 }
 
