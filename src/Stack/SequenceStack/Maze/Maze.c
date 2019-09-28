@@ -15,7 +15,7 @@ int main(){
         InitMaze(maze , &start , &end);
         ShowMaze(maze);
         ClearStack(&s);
-        MazePath(s,maze,start,end);
+        MazePath(&s,maze,start,end);
         printf("review? (Y/N) : ");
         scanf(" %c",&re);
     }

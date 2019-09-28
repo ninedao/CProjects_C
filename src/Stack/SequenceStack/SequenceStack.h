@@ -53,11 +53,12 @@ int GetTop(SqStack s, ElemType *e){
 };
 int push(SqStack *s, ElemType e){
     if(s->top - s->base >= s->size){
-        s->base = (ElemType *)realloc(s->base,(s->size + STACKINCREASESIZE) * sizeof(ElemType));
-        if(!s->base){
+        ElemType * new_ptr = realloc(s->base, sizeof(ElemType) * (s->size + STACKINCREASESIZE));
+        while(!new_ptr){
             printf("Push ERROR!\n");
             exit(OVERFLOW);
         }
+        s->base = new_ptr;
         s->top = s->base + s->size;
         (*s).size = (*s).size + STACKINCREASESIZE;
     }
@@ -66,12 +67,12 @@ int push(SqStack *s, ElemType e){
     return SUCCESS;
 }
 int pop(SqStack *s, ElemType *e){
-    if(s->top == s->base){
+    if(s->base == s->top){
         printf("pop ERROR!\n");
         exit(OVERFLOW);
     }
-    (*s).top --;
-    *e = *((*s).top);
+    s->top --;
+    *e = *s->top;
     return SUCCESS;
 }
 

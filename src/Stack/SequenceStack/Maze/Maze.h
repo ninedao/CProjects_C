@@ -4,7 +4,7 @@
 
 #ifndef CPROJECTS_C_MAZE_H
 #define CPROJECTS_C_MAZE_H
-#define N 15
+#define N 50
 #define X 4
 #define SleepTime 2
 typedef int MazeType;
@@ -44,9 +44,9 @@ int InitMaze(MazeType maze[][N], PosType *start, PosType *end){
     }
     start->x = 1;
     start->y = 0;
-    end->x = N - 2;
-    end->y = N - 1;
-    maze[1][1] = maze[N-2][N-2] = Way;
+    end->x = N - 24;
+    end->y = N - 24;
+    maze[1][1] = maze[N-24][N-24] = Way;
     maze[1][0] = maze[N-2][N-1] = Way;
     printf("InitMaze SUCCESS!\n");
     return SUCCESS;
@@ -141,7 +141,7 @@ void ShowMaze(MazeType maze[][N]){
     system("CLS");*/
     PaintMaze(maze);
 }
-int MazePath(SqStack s,MazeType maze[][N], PosType start, PosType end){
+int MazePath(SqStack *s,MazeType maze[][N], PosType start, PosType end){
     FILE *file;
     file = fopen("C:\\Users\\POPO LIU\\Desktop\\1.txt","at");
     ElemType curElem;
@@ -152,7 +152,7 @@ int MazePath(SqStack s,MazeType maze[][N], PosType start, PosType end){
             FootPrint(curpos , maze);
             ShowMaze(maze);
             SetElemType(&curElem , curStep , curpos , East);
-            push(&s , curElem);
+            push(s , curElem);
             if(EqualMaze(curpos, end)){
                 printf("Search path SUCCESS;\n");
                 fprintf(file,"Search path SUCCESS;\n");
@@ -162,23 +162,23 @@ int MazePath(SqStack s,MazeType maze[][N], PosType start, PosType end){
             curStep++;
         }else{
 
-            if(!StackEmpty(s)){
-                pop(&s , &curElem);
-                while(curElem.di == North && !StackEmpty(s)){
+            if(!StackEmpty(*s)){
+                pop(s , &curElem);
+                while(curElem.di == North && !StackEmpty(*s)){
                     MakeMark(curElem.seat , maze);
                     ShowMaze(maze);
-                    pop(&s , &curElem);
+                    pop(s , &curElem);
                 }
                 if(curElem.di <North){
                     ++curElem.di;
                     maze[curElem.seat.x][curElem.seat.y] = curElem.di;
                     ShowMaze(maze);
-                    push(&s , curElem);
+                    push(s , curElem);
                     curpos = NextPos(curElem.seat, curElem.di);
                 }
             }
         }
-    }while(!StackEmpty(s));
+    }while(!StackEmpty(*s));
     printf("Search path FAIL;\n");
     fprintf(file,"Search path FAIL;\n");
     fclose(file);
