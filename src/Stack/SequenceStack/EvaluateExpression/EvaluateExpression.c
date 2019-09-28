@@ -4,14 +4,15 @@
 
 #include "EvaluateExpression.h"
 int main(){
-    SqStack OPTR , OPND;
+    SqStack OPTR ;
+    DoubleSqStack OPND;
     char re = 'Y';
     printf("go on? (Y/N) : ");
     scanf(" %c",&re);
     while( re =='Y' || re == 'y') {
         EvaluateExpression(&OPTR, &OPND);
         DestoryStack(&OPTR);
-        DestoryStack(&OPND);
+        DestoryDoubleStack(&OPND);
         printf("go on? (Y/N) : ");
         scanf(" %c",&re);
 
