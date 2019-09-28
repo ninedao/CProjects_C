@@ -3,6 +3,7 @@
 //
 
 #include "Maze.h"
+
 int main(){
     PosType start, end;
     MazeType maze[N][N];

@@ -48,7 +48,7 @@ int GetTop(SqStack s, ElemType *e){
         printf("Stack's top is null!\n");
         return ERROR;
     }
-    e = s.top-1;
+    *e = *(s.top-1);
     return SUCCESS;
 };
 int push(SqStack *s, ElemType e){
