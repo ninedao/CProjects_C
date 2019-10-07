@@ -2,18 +2,56 @@
 // Created by POPO LIU on 2019-09-16.
 //
 #include "../../common/common.h"
+
+
 #ifndef CPROJECTS_C_LINKLIST_H
 #define CPROJECTS_C_LINKLIST_H
+#if !defined(CPROJECTS_C_BANK_SIMULATTION_H)
+    typedef int ElemType;
+    int compare(int i, int j){
+        if(i == j){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+#endif
+
 typedef struct LNode{
-    int data;
+    ElemType data;
     struct LNode *next;
-}*Link, *Position;
+}LNode,*Link, *Position;
 typedef struct{
     Link head,tail;
     int len;
 }LinkList;
-int MakeNode(Link *p,int e){
-    (*p) = (Link )malloc(sizeof(Link));
+#if !defined(CPROJECTS_C_BANK_SIMULATTION_H)
+Position LocateElem(LinkList l, int e,int (*compare)(int, int) ){
+    Link p = l.head;
+    while(p->next){
+        p = p->next;
+        if((*compare)(e,p->data)){
+            return p;
+        }
+    }
+    return null;
+}
+int visit(int e){
+    printf("%d ",e);
+    return SUCCESS;
+}
+int ListTraverse(LinkList l, int (*visit)(int)){
+    Link p = l.head;
+    while(p->next){
+        p = p->next;
+        (*visit)(p->data);
+    }
+    printf("\n");
+}
+#endif
+int MakeNode(Link *p,ElemType e){
+    (*p) = (Link )malloc(sizeof(LNode));
     (*p)->data = e;
     (*p)->next = null;
     if(*p){
@@ -31,7 +69,7 @@ int FreeNode(Link *p){
     return SUCCESS;
 }
 int InitList(LinkList *l){
-    Link p = (Link )malloc(sizeof(Link));
+    Link p = (Link )malloc(sizeof(LNode));
     if(!p){
         exit(OVERFLOW);
     }
@@ -75,7 +113,7 @@ int DelFirst(Link h, Link *q){
     if(*q){
         h->next = (*q)->next;
     }
-    printf("DelFirst SUCCESS!\n");
+    //printf("DelFirst SUCCESS!\n");
     return SUCCESS;
 }
 int Append(LinkList *l,Link s){
@@ -135,13 +173,13 @@ int InsAfter(LinkList *l, Link *p, Link s){
     printf("InsAfter SUCCESS!\n");
     return SUCCESS;
 }
-int SetCurElem(Link *p, int e){
+int SetCurElem(Link *p, ElemType e){
     (*p)->data = e;
     printf("SetCurElem SUCCESS!\n");
     return SUCCESS;
 }
-int getCurElem(Link p){
-    printf("getCurElem SUCCESS(%d)!\n",p->data);
+ElemType getCurElem(Link p){
+    //printf("getCurElem SUCCESS(%d)!\n",p->data);
     return p->data;
 }
 int ListEmpty(LinkList l){
@@ -184,36 +222,9 @@ int LocatePos(LinkList l, int i, Link *p){
     printf("LocatePos SUCCESS!\n");
     return SUCCESS;
 }
-int compare(int i, int j){
-    if(i == j){
-        return TRUE;
-    }else{
-        return FALSE;
-    }
-}
-Position LocateElem(LinkList l, int e,int (*compare)(int, int) ){
-    Link p = l.head;
-    while(p->next){
-        p = p->next;
-        if((*compare)(e,p->data)){
-            return p;
-        }
-    }
-    return null;
-}
-int visit(int e){
-    printf("%d ",e);
-    return SUCCESS;
-}
-int ListTraverse(LinkList l, int (*visit)(int)){
-    Link p = l.head;
-    while(p->next){
-        p = p->next;
-        (*visit)(p->data);
-    }
-    printf("\n");
-}
-int ListInsert(LinkList *l, int i,int e){
+
+
+int ListInsert(LinkList *l, int i,ElemType e){
     if(i <= 0 || i > l->len + 1){
         printf("ListInsert ERROR!\n");
         exit(OVERFLOW);
@@ -232,6 +243,7 @@ int ListInsert(LinkList *l, int i,int e){
     printf("ListInsert SUCCESS!\n");
     return SUCCESS;
 }
+#if !defined(CPROJECTS_C_BANK_SIMULATTION_H)
 int MergeList_L(LinkList *a, LinkList *b , LinkList *c){
     Link p = (*a).head->next, q = (*b).head->next, r = (*c).head;
     Link m;
@@ -261,4 +273,38 @@ int MergeList_L(LinkList *a, LinkList *b , LinkList *c){
     printf("MergeList_L SUCCESS\n");
     return SUCCESS;
 }
+#endif
+#if defined(CPROJECTS_C_BANK_SIMULATTION_H)
+    int compare(ElemType e, ElemType p){
+        if(e.OccurTime > p.OccurTime){
+            return 1;
+        }else if(e.OccurTime == p.OccurTime){
+            return 0;
+        }else{
+            return -1;
+        }
+    }
+    status OrderInsert(LinkList *l, ElemType e,int (*compare)(ElemType, ElemType)){
+        Link p = l->head;
+        Link s = p->next;
+        Link q;
+        MakeNode(&q, e);
+        if(l->len > 0){
+            while(s != null){
+                if(compare(s->data, e) > 0){
+                    InsAfter(l, &p, q);
+                    break;
+                }else{
+                    s = s->next;
+                    p = p->next;
+                }
+            }
+        }
+        if(!s){
+            InsAfter(l, &p, q);
+            l->tail = q;
+        }
+        return SUCCESS;
+    }
+#endif
 #endif //CPROJECTS_C_LINKLIST_H
