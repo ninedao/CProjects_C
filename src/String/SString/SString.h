@@ -93,6 +93,7 @@ int Index_Sq(SString ss, SString tt, int pos){
     }
     int i = pos;
     int j = 1;
+    int k = 0;
     while(i <= ss[0] && j <= tt[0]){
         if(ss[i] == tt[j]){
             i++;
@@ -101,7 +102,9 @@ int Index_Sq(SString ss, SString tt, int pos){
             i = i - (j - 1) + 1;
             j = 1;
         }
+        k++;
     }
+    printf("gogo%d\n", k);
     if(j > tt[0] && tt[0]){
         return i - tt[0];
     }else{
@@ -150,6 +153,55 @@ status Replace_Sq(SString ss, SString tt, SString vv){
     }else{
         printf("Replace_Sq ERROR!\n");
         exit(OVERFLOW);
+    }
+}
+int Index_KMP(SString S, SString T, int pos, int next[]){
+    int j = 1, i = pos;
+    int k = 0;
+    while(i <= S[0] && j <= T[0]){
+        if(j == 0 || S[i] == T[j]){
+            ++i;
+            ++j;
+        }else{
+            j = next[j];
+        }
+        k++;
+    }
+    printf("gogo%d\n",k);
+    if(j > T[0]){
+        return i - T[0];
+    }else{
+        return 0;
+    }
+}
+void get_next(SString T, int next[]){
+    int j = 0, i = 1;
+    next[1] = 0;
+    while(i < T[0] ){
+        if(j == 0 || T[j] == T[i]){
+            ++i;
+            ++j;
+            next[i] = j;
+        }else{
+            j = next[j];
+        }
+    }
+}
+void get_nextval(SString T, int nextval[]){
+    int j = 0, i = 1;
+    nextval[1] = 0;
+    while(i < T[0] ){
+        if(j == 0 || T[j] == T[i]){
+            ++i;
+            ++j;
+            if(T[j] != T[i]){
+                nextval[i] = j;
+            }else{
+                nextval[i] = nextval[j];
+            }
+        }else{
+            j = nextval[j];
+        }
     }
 }
 #endif //CPROJECTS_C_SSTRING_H
