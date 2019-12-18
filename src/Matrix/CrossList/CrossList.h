@@ -19,7 +19,6 @@ typedef struct{
 }CrossList;
 
 status CreateSMatrix_OL(CrossList *M){
-
     printf("Input rows cols and counts:");
     scanf("%d %d %d", &M->rows, &M->cols, &M->count);
     M->rhead = (OLink *) malloc((M->rows + 1) * sizeof(OLink));
@@ -78,19 +77,26 @@ status AddSMatrix_OL(CrossList *A, CrossList B){
     OLNode *pa, *pb, *pre;
     OLink  *hl = (OLink *)malloc(A->cols * sizeof(OLink));
     pre = NULL;
+    OLNode *p = (OLNode *) malloc(sizeof(OLNode));
     for(int j = 1; j <= A->cols; j++){
         hl[j] = A->chead[j];
     }
+
     for(int i = 1; i <= A->rows ; i++){
+
         pa = A->rhead[i];
         pb = B.rhead[i];
         while(pb != NULL) {
-            OLNode *p = (OLNode *) malloc(sizeof(OLNode));
+
+            if(!p) {
+                OLNode *p = (OLNode *) malloc(sizeof(OLNode));
+            }
             p->i = pb->i;
             p->j = pb->j;
             p->e = pb->e;
             p->right = NULL;
             p->down = NULL;
+
             if (pa == NULL || pa->j > pb->j) {
                 if (pre == NULL) {
                     A->rhead[p->i] = p;
@@ -110,13 +116,16 @@ status AddSMatrix_OL(CrossList *A, CrossList B){
             } else if (pa->j < pb->j) {
                 pre = pa;
                 pa = pa->right;
+                continue;
             } else if (pa->j == pb->j) {
-                if (pa->e + pb->e == 0) {
+                pa->e += pb->e;
+                if (pa->e == 0) {
                     if(pre == NULL){
-                        A->chead[pa->i] = pa->right;
+                        A->rhead[pa->i] = pa->right;
                     }else{
                         pre->right = pa->right;
                     }
+
                     p = pa;
                     pa = pa->right;
                     if(A->chead[p->j] == p){
@@ -124,26 +133,26 @@ status AddSMatrix_OL(CrossList *A, CrossList B){
                     }else{
                         hl[p->j]->down = p->down;
                     }
-                    free(p);
-                } else {
-                    pa->e += pb->e;
                 }
             }
             pb = pb->right;
         }
+
     }
     return SUCCESS;
 }
 status PrintSMatrix_OL(CrossList M){
-    OLNode *p;
+
+    OLNode *p ;
+
     for(int i = 1; i <= M.rows ; i++){
         p = M.rhead[i];
-        for(int j = 1; j<= M.cols ; j++){
+        for(int j = 1; j <= M.cols ; j++){
             if(p && p->j == j){
                 printf("%-3d", p->e);
                 p = p->right;
             }else{
-                printf("%-3d", 0);
+                printf("0  ");
             }
         }
         printf("\n");
